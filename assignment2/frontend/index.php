@@ -91,11 +91,11 @@
           </div>
         </label>
 
-        <div class="preview-section">
+        <div class="preview-section" >
           <div class="preview-header">
             <span class="preview-label">Preview</span>
           </div>
-          <div class="preview-placeholder">
+          <div class="preview-placeholder" id="previewBox">
             <svg width="32" height="32" viewBox="0 0 24 24" fill="none"
                  stroke="currentColor" stroke-width="1.5"
                  stroke-linecap="round" stroke-linejoin="round">
@@ -123,5 +123,38 @@
     </div>
   </div>
 
+  <script>
+  const fileInput = document.getElementById('fileInput');
+  const previewBox = document.getElementById('previewBox');
+
+  fileInput.addEventListener('change', function () {
+    const file = this.files[0];
+
+    if (!file) {
+      previewBox.innerHTML = `
+        <p>Preview gambar akan tampil di sini<br/>setelah file dipilih</p>
+      `;
+      return;
+    }
+
+    // Validasi tipe file (opsional, biar aman)
+    if (!file.type.startsWith('image/')) {
+      previewBox.innerHTML = `<p style="color:red;">File bukan gambar!</p>`;
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      previewBox.innerHTML = `
+        <img src="${e.target.result}" 
+             alt="Preview" 
+             style="max-width:100%; border-radius:12px;">
+      `;
+    };
+
+    reader.readAsDataURL(file);
+  });
+</script>
 </body>
 </html>
